@@ -14,8 +14,11 @@
 package cn.ucai.superwechat.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,7 +28,10 @@ import android.widget.Toast;
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
 import cn.ucai.superwechat.DemoApplication;
+import cn.ucai.superwechat.I;
 import cn.ucai.superwechat.R;
+import cn.ucai.superwechat.listener.OnSetAvatarListener;
+
 import com.easemob.exceptions.EaseMobException;
 
 /**
@@ -33,12 +39,15 @@ import com.easemob.exceptions.EaseMobException;
  * 
  */
 public class RegisterActivity extends BaseActivity {
+	private static final String TAG = RegisterActivity.class.getSimpleName();
 	private EditText userNameEditText;
 	private EditText passwordEditText;
 	private EditText confirmPwdEditText;
 	private EditText  userNickEditText;
     private RelativeLayout layoutAvatar;
 	private ImageView   imAvatar;
+	private OnSetAvatarListener mOnSetAvatarListener;
+	String avatarName;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,14 +63,52 @@ public class RegisterActivity extends BaseActivity {
 				register();
 			}
 		});
+
+		findViewById(R.id.iv_dl_title_upload_photo).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mOnSetAvatarListener = new OnSetAvatarListener(RegisterActivity.this,
+						R.id.layout_register,
+						userNameEditText.getText().toString().trim(),
+						I.AVATAR_TYPE_USER_PATH);
+
+			}
+		});
+		findViewById(R.id.dl_title_upload_photo).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mOnSetAvatarListener = new OnSetAvatarListener(RegisterActivity.this,
+						R.id.layout_register,
+						userNameEditText.getText().toString().trim(),
+						I.AVATAR_TYPE_USER_PATH);
+
+			}
+		});
+
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode!=RESULT_OK){
+			return;
+		}
+		mOnSetAvatarListener.setAvatar(requestCode,data,imAvatar);
+	}
+
+	private String getAvatarName(){
+		avatarName=String.valueOf(System.currentTimeMillis());
+		return avatarName;
+	}
+
 	private void intView() {
 		userNameEditText = (EditText) findViewById(R.id.username);
 		passwordEditText = (EditText) findViewById(R.id.password);
-		confirmPwdEditText = (EditText) findViewById(R.id.confirm_password);
+		confirmPwdEditText = (EditText) findViewById(R.id.comfirmPassword);
 		userNickEditText= (EditText) findViewById(R.id.nick);
 		layoutAvatar= (RelativeLayout) findViewById(R.id.rl_dl_title_upload_photo);
 		imAvatar= (ImageView) findViewById(R.id.iv_dl_title_upload_photo);
+
 	}
 
 	/**
