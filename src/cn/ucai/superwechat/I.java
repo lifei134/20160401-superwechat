@@ -1,5 +1,7 @@
 package cn.ucai.superwechat;
 
+import org.jivesoftware.smack.util.dns.SRVRecord;
+
 public interface I {
 
 	 interface User {
@@ -57,7 +59,8 @@ public interface I {
 		String IS_SEARCHED 							= 		"m_location_is_searched";		//是否可以被搜索到
 		String UPDATE_TIME 							= 		"m_location_last_update_time";	//最后更新时间
 	}
-
+	String EQUAL_SIGN                               =     "=";
+    String QUESTION                                 =      "?";
 	String SERVER_ROOT                              =       "http://192.168.1.40:8080/SuperWeChatServer/Server";
 //	String AVATAR_PATH 								= 		"E:/test/";
 	String ISON8859_1 								= 		"iso8859-1";

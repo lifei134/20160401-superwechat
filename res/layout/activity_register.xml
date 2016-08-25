@@ -168,7 +168,10 @@
             android:inputType="textPassword"
             android:paddingLeft="10dip"
             android:singleLine="true"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:clickable="false"
+            android:enabled="true"
+            />
 
         <ImageView
             android:id="@+id/iv_dl_title_upload_photo"
